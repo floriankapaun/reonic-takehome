@@ -31,7 +31,7 @@ const ARRIVAL_PROBABILITIES: Record<number, number> = {
     22: 0.0094,
     23: 0.0094,
 } as const
-/** [km, probability 0-1] */
+/** [probability 0-1, km]; null means no charging needed */
 const CHARGING_DEMAND_OPTIONS: [number, number | null][] = [
     [0.3431, null],
     [0.049, 5.0],
