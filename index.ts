@@ -108,8 +108,8 @@ const theoreticalMaxPowerDemandInKW = NUMBER_OF_CHARGEPOINTS * CHARGING_POWER_IN
 const concurrencyFactor = actualMaxPowerDemandInKW / theoreticalMaxPowerDemandInKW
 
 console.table({
-    "Total energy consumed in kWh": totalKiloWattHoursConsumed,
-    "Theoretical maximum power demand": theoreticalMaxKiloWatts,
-    "Actual maximum power demand": actualMaxKiloWatts,
-    "Concurrency factor": concurrencyFactor,
+    "Total energy consumed in kWh": { value: totalKiloWattHoursConsumed },
+    "Theoretical maximum power demand": { value: theoreticalMaxPowerDemandInKW },
+    "Actual maximum power demand": { value: actualMaxPowerDemandInKW, expected: "77-121 kW" },
+    "Concurrency factor": { value: concurrencyFactor * 100, expected: "35-55%" },
 })
