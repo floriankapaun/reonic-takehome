@@ -1,7 +1,8 @@
-const NUMBER_OF_CHARGEPOINTS = 20
-const CHARGING_POWER_IN_KW = 11
-const KWH_PER_100_KM = 18
-
+const NUMBER_OF_CHARGEPOINTS = 20 as const
+const CHARGING_POWER_IN_KW = 11 as const
+const ENERGY_NEED_PER_KM_IN_KWH = 0.18 as const
+/** we simulate one non-leap year in 15 minute steps */
+const TICKS = 365 * 24 * 4
 /** Record<hour, probability 0-1> */
 const ARRIVAL_PROBABILITIES: Record<number, number> = {
     0: 0.0094,
@@ -28,8 +29,7 @@ const ARRIVAL_PROBABILITIES: Record<number, number> = {
     21: 0.0472,
     22: 0.0094,
     23: 0.0094,
-}
-
+} as const
 /** [km, probability 0-1] */
 const CHARGING_DEMAND_OPTIONS: [number, number | null][] = [
     [0.3431, null],
@@ -41,19 +41,22 @@ const CHARGING_DEMAND_OPTIONS: [number, number | null][] = [
     [0.1078, 100.0],
     [0.049, 200.0],
     [0.0294, 300.0],
-]
+] as const
 
-// [34.31, null],
-//   [4.90, 5.0],
-//   [9.80, 10.0],
-//   [11.76, 20.0],
-//   [8.82, 30.0],
-//   [11.76, 50.0],
-//   [10.78, 100.0],
-//   [4.90, 200.0],
-//   [2.94, 300.0]
+const chargePoints: { remainingChargingTimeInTicks: number }[] = Array.from(
+    { length: NUMBER_OF_CHARGEPOINTS },
+    () => ({ remainingChargingTimeInTicks: 0 }),
+)
 
-const getRandomChargingDemandInKm = (): number | null => {
+const doesCarArrive = (hour: number): boolean => {
+    const arrivalProbability = ARRIVAL_PROBABILITIES[hour]
+    if (arrivalProbability === undefined) {
+        throw new Error(`No arrival probability defined for hour ${hour}`)
+    }
+    return Math.random() < arrivalProbability
+}
+
+const pickRandomChargingDemandInKm = (): number | null => {
     const random = Math.random()
 
     let total = 0
@@ -62,65 +65,48 @@ const getRandomChargingDemandInKm = (): number | null => {
         if (random < total) return distance
     }
 
-    // There's a 0.03 % chance of a car demanding charge for an undefined amount of kms. I decided to make that 0.
-    return 0
+    // There's a 0.03 % chance that none of the provided options is chosen.
+    // Because that's negligible, we just return null in that case.
+    return null
 }
 
-// simulate one year in 15 minute steps
-const TICKS = 365 * 24 * 4
-
-// results
 let totalKiloWattHoursConsumed = 0
-const theoreticalMaxKiloWatts = NUMBER_OF_CHARGEPOINTS * CHARGING_POWER_IN_KW
-const actualMaxKiloWatts = 0 // should be around 77-121 kW
-const concurrencyFactor = 0 // should be between 35-55%
+let actualMaxPowerDemandInKW = 0
+for (let tick = 0; tick < TICKS; tick++) {
+    const currentHour = Math.floor((tick % (24 * 4)) / 4)
 
-type ChargePoint = {
-    remainingChargingTimeInTicks: number
-}
-
-const chargePoints: ChargePoint[] = Array.from({ length: NUMBER_OF_CHARGEPOINTS }, () => ({
-    remainingChargingTimeInTicks: 0,
-}))
-
-for (let day = 0; day < 365; day++) {
-    for (let hour = 0; hour < 24; hour++) {
-        for (let step = 0; step < 4; step++) {
-            for (const chargePoint of chargePoints) {
-                // If already charging, decrease remaining charging time and continue
-                if (chargePoint.remainingChargingTimeInTicks > 0) {
-                    chargePoint.remainingChargingTimeInTicks -= 1
-                    continue
-                }
-
-                const currentArrivalProbability = ARRIVAL_PROBABILITIES[hour]
-                if (Math.random() >= currentArrivalProbability) {
-                    // No car arrives
-                    continue
-                }
-
-                const chargingDemandInKm = getRandomChargingDemandInKm()
-                if (!chargingDemandInKm) {
-                    // No charging needed
-                    continue
-                }
-
-                const demandedEnergyInKWH = (chargingDemandInKm / 100) * KWH_PER_100_KM
-
-                totalKiloWattHoursConsumed += demandedEnergyInKWH
-
-                chargePoint.remainingChargingTimeInTicks =
-                    demandedEnergyInKWH / CHARGING_POWER_IN_KW / 4
-            }
+    for (const chargePoint of chargePoints) {
+        if (chargePoint.remainingChargingTimeInTicks > 0) {
+            chargePoint.remainingChargingTimeInTicks -= 1
+            continue
         }
+
+        if (!doesCarArrive(currentHour)) {
+            continue
+        }
+
+        const chargingDemandInKm = pickRandomChargingDemandInKm()
+        if (chargingDemandInKm === null) {
+            continue
+        }
+
+        const demandedEnergyInKWH = chargingDemandInKm * ENERGY_NEED_PER_KM_IN_KWH
+        totalKiloWattHoursConsumed += demandedEnergyInKWH
+        chargePoint.remainingChargingTimeInTicks = demandedEnergyInKWH / CHARGING_POWER_IN_KW / 4
+    }
+
+    const chargePointsInUse = chargePoints.filter(
+        (cp) => cp.remainingChargingTimeInTicks > 0,
+    ).length
+    const currentPowerDemandInKW = chargePointsInUse * CHARGING_POWER_IN_KW
+    if (currentPowerDemandInKW > actualMaxPowerDemandInKW) {
+        actualMaxPowerDemandInKW = currentPowerDemandInKW
     }
 }
 
-// for (let tick = 0; tick < TICKS; tick++) {
-//     const currentHour = Math.floor((tick % (24 * 4)) / 4)
-// }
+const theoreticalMaxPowerDemandInKW = NUMBER_OF_CHARGEPOINTS * CHARGING_POWER_IN_KW
+const concurrencyFactor = actualMaxPowerDemandInKW / theoreticalMaxPowerDemandInKW
 
-console.log("Total energy consumed in kWh:", totalKiloWattHoursConsumed)
 console.table({
     "Total energy consumed in kWh": totalKiloWattHoursConsumed,
     "Theoretical maximum power demand": theoreticalMaxKiloWatts,
