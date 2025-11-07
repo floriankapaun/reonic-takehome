@@ -1,8 +1,9 @@
 const NUMBER_OF_CHARGEPOINTS = 20 as const
 const CHARGING_POWER_IN_KW = 11 as const
 const ENERGY_NEED_PER_KM_IN_KWH = 0.18 as const
+const TICKS_PER_HOUR = 4 as const
 /** we simulate one non-leap year in 15 minute steps */
-const TICKS = 365 * 24 * 4
+const TICKS = 365 * 24 * TICKS_PER_HOUR
 /** Record<hour, probability 0-1> */
 const ARRIVAL_PROBABILITIES: Record<number, number> = {
     0: 0.0094,
@@ -75,7 +76,7 @@ const pickRandomChargingDemandInKm = (): number | null => {
 let totalKiloWattHoursConsumed = 0
 let actualMaxPowerDemandInKW = 0
 for (let tick = 0; tick < TICKS; tick++) {
-    const currentHour = Math.floor((tick % (24 * 4)) / 4)
+    const currentHour = Math.floor((tick % (24 * TICKS_PER_HOUR)) / TICKS_PER_HOUR)
 
     let chargePointsInUse = 0
     for (const chargePoint of chargePoints) {
@@ -98,7 +99,7 @@ for (let tick = 0; tick < TICKS; tick++) {
         const demandedEnergyInKWH = chargingDemandInKm * ENERGY_NEED_PER_KM_IN_KWH
         totalKiloWattHoursConsumed += demandedEnergyInKWH
         chargePoint.remainingChargingTimeInTicks = Math.ceil(
-            demandedEnergyInKWH / CHARGING_POWER_IN_KW / 4,
+            demandedEnergyInKWH / CHARGING_POWER_IN_KW / TICKS_PER_HOUR,
         )
     }
 
