@@ -66,7 +66,9 @@ const pickRandomChargingDemandInKm = (): number | null => {
     }
 
     // There's a 0.03 % chance that none of the provided options is chosen.
-    // Because that's negligible, we just return null in that case.
+    // Because that's negligible, we just return null in that case. If we want
+    // to improve accuracy going forward, we could normalize the chances to
+    // sum to 1.
     return null
 }
 
