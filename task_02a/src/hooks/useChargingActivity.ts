@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 
 export type MonthlyChargingActivity = {
     month: string
@@ -23,12 +23,23 @@ const MOCK_DATA: MonthlyChargingActivity[] = [
 ]
 
 export const useChargingActivity = () => {
-    return useQuery({
-        queryKey: ["charging-activity"],
-        queryFn: async (): Promise<MonthlyChargingActivity[]> => {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 500))
-            return MOCK_DATA
-        },
-    })
+    const [data, setData] = useState<MonthlyChargingActivity[] | undefined>(undefined)
+    const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setIsLoading(true)
+                // Simulate API call
+                await new Promise((resolve) => setTimeout(resolve, 500))
+                setData(MOCK_DATA)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchData()
+    }, [])
+
+    return { data, isLoading }
 }
