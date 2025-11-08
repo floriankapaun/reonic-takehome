@@ -29,72 +29,59 @@ const ARRIVAL_PROBABILITIES: Record<number, number> = {
     23: 0.0094,
 } as const
 
-type ArrivalProbabilityListProps = {
+type ArrivalProbabilityProps = {
     multiplier: number
 }
 
-const ArrivalProbabilityList = ({ multiplier }: ArrivalProbabilityListProps) => {
-    return (
-        <table className="text-sm tabular-nums">
-            <tbody>
-                {Object.entries(ARRIVAL_PROBABILITIES).map(([hour, probability]) => (
-                    <tr key={hour}>
-                        <td className="w-full">
-                            {hour.padStart(2, "0")}:00 –{" "}
-                            {(parseInt(hour) + 1).toString().padStart(2, "0")}:00
-                        </td>
-                        <td className="text-right">
-                            <span className="font-medium">
-                                {(probability * 100 * multiplier).toFixed(2)}
-                            </span>
-                            %
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    )
-}
-
-type ArrivalProbabilityChartProps = {
-    multiplier: number
-    className?: string
-}
-
-const ArrivalProbabilityChart = ({ multiplier, className = "" }: ArrivalProbabilityChartProps) => {
+const ArrivalProbability = ({ multiplier }: ArrivalProbabilityProps) => {
     const data = Object.entries(ARRIVAL_PROBABILITIES).map(([hour, probability]) => ({
         hour: `${hour.padStart(2, "0")}:00 – ${(Number(hour) + 1).toString().padStart(2, "0")}:00`,
         probability: (probability * multiplier * 100).toFixed(2),
     }))
 
     return (
-        <AreaChart
-            className={`w-full aspect-40/9 ${className}`}
-            responsive
-            data={data}
-            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
-        >
-            <defs>
-                <linearGradient id="probabilityGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(0, 0, 0, 0.87)" stopOpacity={0.6} />
-                    <stop offset="100%" stopColor="rgba(0, 0, 0, 0.87)" stopOpacity={0} />
-                </linearGradient>
-            </defs>
-            <XAxis dataKey="hour" tick={false} height={1} />
-            <YAxis tick={false} width={1} />
-            <Tooltip
-                formatter={(value) => [`${value}%`, "Arrival Probability"]}
-                allowEscapeViewBox={{ x: true, y: true }}
-            />
-            <Area
-                dataKey="probability"
-                type="monotone"
-                stroke="rgba(0, 0, 0, 0.87)"
-                strokeWidth={1}
-                fill="url(#probabilityGradient)"
-                isAnimationActive={false}
-            />
-        </AreaChart>
+        <div className="mt-4 px-3 py-2 bg-gray-100 rounded-sm group">
+            <table className="text-sm tabular-nums">
+                <tbody>
+                    {data.map(({ hour, probability }) => (
+                        <tr key={hour}>
+                            <td className="w-full">{hour}</td>
+                            <td className="text-right">
+                                <span className="font-medium">{probability}</span>%
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            <AreaChart
+                className="w-full aspect-40/9 mt-4 opacity-30 group-hover:opacity-100 transition-opacity duration-200"
+                responsive
+                data={data}
+                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+            >
+                <defs>
+                    <linearGradient id="probabilityGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="rgba(0, 0, 0, 0.87)" stopOpacity={0.6} />
+                        <stop offset="100%" stopColor="rgba(0, 0, 0, 0.87)" stopOpacity={0} />
+                    </linearGradient>
+                </defs>
+                <XAxis dataKey="hour" tick={false} height={1} />
+                <YAxis tick={false} width={1} />
+                <Tooltip
+                    formatter={(value) => [`${value}%`, "Arrival Probability"]}
+                    allowEscapeViewBox={{ x: true, y: true }}
+                />
+                <Area
+                    dataKey="probability"
+                    type="monotone"
+                    stroke="rgba(0, 0, 0, 0.87)"
+                    strokeWidth={1}
+                    fill="url(#probabilityGradient)"
+                    isAnimationActive={false}
+                />
+            </AreaChart>
+        </div>
     )
 }
 
@@ -144,13 +131,7 @@ const SimulationInput = () => {
                     }}
                 />
 
-                <div className="mt-4 px-3 py-2 bg-gray-100 rounded-sm group">
-                    <ArrivalProbabilityList multiplier={state.arrivalProbabilityMultiplier} />
-                    <ArrivalProbabilityChart
-                        multiplier={state.arrivalProbabilityMultiplier}
-                        className="mt-4 opacity-30 group-hover:opacity-100 transition-opacity duration-200"
-                    />
-                </div>
+                <ArrivalProbability multiplier={state.arrivalProbabilityMultiplier} />
             </div>
         </>
     )
