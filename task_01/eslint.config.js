@@ -2,7 +2,6 @@ import js from "@eslint/js"
 import prettierConfig from "eslint-config-prettier"
 import prettier from "eslint-plugin-prettier"
 import simpleImportSort from "eslint-plugin-simple-import-sort"
-import globals from "globals"
 import tseslint from "typescript-eslint"
 
 export default [
@@ -12,7 +11,6 @@ export default [
     {
         files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
         languageOptions: {
-            globals: globals.node,
             parser: tseslint.parser,
         },
         plugins: {
