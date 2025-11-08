@@ -18,7 +18,9 @@ export function App() {
                 <p>Adjust and run simulation</p>
                 <InputParameters />
             </aside>
-            <main className="col-span-3"></main>
+            <main className="col-span-3 bg-gray-100 p-6 rounded-t-sm shadow-md">
+                <HighlightInfo />
+            </main>
         </>
     )
 }
