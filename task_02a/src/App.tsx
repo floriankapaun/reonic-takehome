@@ -19,10 +19,9 @@ export function App() {
             </aside>
 
             <main className="col-span-3 p-6">
-                <HighlightInfo className="mt-2" />
+                <HighlightInfo className="mt-4" />
 
-                <h2 className="text-xl font-semibold mb-4 mt-10">Charging Activity</h2>
-                <ChargingActivityChart />
+                <ChargingActivity className="mt-10" />
             </main>
         </QueryClientProvider>
     )

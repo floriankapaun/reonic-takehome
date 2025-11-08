@@ -1,9 +1,20 @@
-import { useQuery } from "@tanstack/react-query"
 import { Label, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
-import { useGetMonthlyChargingActivity } from "./query"
+import { chargingActivityKeys, useGetMonthlyChargingActivity } from "./query"
+import type { Timeframe } from "./types"
+import { useEffect } from "react"
+import { queryClient } from "@/App"
 
-const ChargingActivityChart = () => {
-    const { data, isLoading } = useGetMonthlyChargingActivity()
+type ChargingActivityChartProps = {
+    timeframe: Timeframe
+}
+
+const ChargingActivityChart = ({ timeframe }: ChargingActivityChartProps) => {
+    const { data, isLoading, isFetching } = useGetMonthlyChargingActivity()
+
+    useEffect(() => {
+        // Just to simulate refetching, I'm not even switching the data.
+        queryClient.invalidateQueries({ queryKey: chargingActivityKeys.monthly() })
+    }, [timeframe])
 
     return (
         <LineChart
@@ -16,7 +27,7 @@ const ChargingActivityChart = () => {
             <YAxis yAxisId="left" orientation="left" tickLine={false} />
             <YAxis yAxisId="right" orientation="right" tickLine={false} />
 
-            {isLoading && <Label value="Loading data..." position="center" />}
+            {(isLoading || isFetching) && <Label value="Loading data..." position="center" />}
 
             {!isLoading && !data && <Label value="No data available" position="center" />}
 
