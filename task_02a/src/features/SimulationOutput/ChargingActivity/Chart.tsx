@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
+import { Label, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 import { useGetMonthlyChargingActivity } from "./query"
 
 const ChargingActivityChart = () => {
@@ -7,7 +7,7 @@ const ChargingActivityChart = () => {
 
     return (
         <LineChart
-            style={{ width: "100%", aspectRatio: "24 / 9" }}
+            className="w-full aspect-29/9"
             responsive
             data={data}
             margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
@@ -16,7 +16,16 @@ const ChargingActivityChart = () => {
             <YAxis yAxisId="left" orientation="left" tickLine={false} />
             <YAxis yAxisId="right" orientation="right" tickLine={false} />
 
-            <Tooltip />
+            {isLoading && <Label value="Loading data..." position="center" />}
+
+            {!isLoading && !data && <Label value="No data available" position="center" />}
+
+            <Tooltip
+                formatter={(value, name) => {
+                    if (name === "kWh") return [`${value} kWh`, "Energy charged"]
+                    return [value, "Charging events"]
+                }}
+            />
 
             <Line
                 yAxisId="left"
