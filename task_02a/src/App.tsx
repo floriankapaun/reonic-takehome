@@ -1,9 +1,7 @@
-import HighlightInfo from "./features/SimulationOutput/HightlightInfo"
 import "./index.css"
-import ChargingActivityChart from "./features/SimulationOutput/ChargingActivity/Chart"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import ChargingActivity from "./features/SimulationOutput/ChargingActivity"
 import SimulationInput from "./features/SimulationInput"
+import SimulationOutput from "./features/SimulationOutput"
 
 export const queryClient = new QueryClient()
 
@@ -19,13 +17,7 @@ export function App() {
             </aside>
 
             <main className="col-span-3 p-6">
-                <HighlightInfo className="mt-4" />
-
-                <ChargingActivity className="mt-10" />
-
-                {/* Displaying this component multiple times as a placeholder for other charts. */}
-                <ChargingActivity className="mt-10" />
-                <ChargingActivity className="mt-10" />
+                <SimulationOutput />
             </main>
         </QueryClientProvider>
     )
