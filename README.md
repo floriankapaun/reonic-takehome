@@ -37,3 +37,7 @@ To run for production:
 ```bash
 bun start
 ```
+
+Here's a screenshot of the prototype:
+
+![Screenshot of the prototype](./docs/task_02a.png)
