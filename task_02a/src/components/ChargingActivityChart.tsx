@@ -29,7 +29,7 @@ const ChargingActivityChart = ({ className = "" }: ChargingActivityChartProps) =
                 className="w-full aspect-29/9"
                 responsive
                 data={data}
-                margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
+                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
             >
                 <XAxis dataKey="month" />
                 <YAxis yAxisId="left" orientation="left" tickLine={false} />
