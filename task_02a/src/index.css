@@ -2,7 +2,7 @@
 
 @layer base {
     :root {
-        @apply text-[rgba(0,0,0,0.87)] bg-gray-50 font-sans;
+        @apply text-[rgba(0,0,0,0.87)] bg-white font-sans;
     }
 
     body {
@@ -10,7 +10,7 @@
     }
 
     #root {
-        @apply max-w-7xl min-h-screen grid grid-cols-4 gap-4 mx-auto;
+        @apply max-w-7xl min-h-screen grid grid-cols-4 gap-4;
     }
 }
 
