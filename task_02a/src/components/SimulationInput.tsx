@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Area, AreaChart, Tooltip, XAxis, YAxis } from "recharts"
 import NumberInput from "./NumberInput"
 
