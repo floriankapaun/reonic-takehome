@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Area, AreaChart, Tooltip, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, Tooltip } from "recharts"
 import NumberInput from "./NumberInput"
 
 const ARRIVAL_PROBABILITIES: Record<number, number> = {

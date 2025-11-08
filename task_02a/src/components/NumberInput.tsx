@@ -7,11 +7,10 @@ type NumberInputProps = {
     min?: number
     max?: number
     step?: number
-    suffix?: string
     onChange?: (newValue: number) => void
 }
 
-const NumberInput = ({ value, label, suffix, onChange, min, max, ...rest }: NumberInputProps) => {
+const NumberInput = ({ value, label, onChange, min, max, ...rest }: NumberInputProps) => {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = e.currentTarget.valueAsNumber
 
