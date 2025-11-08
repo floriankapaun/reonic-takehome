@@ -31,9 +31,23 @@ const ChargingActivityChart = ({ className = "" }: ChargingActivityChartProps) =
                 data={data}
                 margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
             >
-                <XAxis dataKey="month" />
-                <YAxis yAxisId="left" orientation="left" tickLine={false} />
-                <YAxis yAxisId="right" orientation="right" tickLine={false} />
+                <XAxis dataKey="month" axisLine={false} tick={{ fontSize: 12 }} tickLine={false} />
+                <YAxis
+                    yAxisId="left"
+                    orientation="left"
+                    axisLine={false}
+                    tick={{ fontSize: 12 }}
+                    tickLine={false}
+                    width="auto"
+                />
+                <YAxis
+                    yAxisId="right"
+                    orientation="right"
+                    axisLine={false}
+                    tick={{ fontSize: 12 }}
+                    tickLine={false}
+                    width="auto"
+                />
 
                 {isLoading && <Label value="Loading data..." position="center" />}
 
@@ -49,7 +63,7 @@ const ChargingActivityChart = ({ className = "" }: ChargingActivityChartProps) =
                     yAxisId="left"
                     dot={false}
                     type="monotone"
-                    stroke="#8884d8"
+                    stroke="var(--color-blue-600)"
                     strokeWidth={2}
                     fill="url(#colorKWH)"
                 />
@@ -58,7 +72,7 @@ const ChargingActivityChart = ({ className = "" }: ChargingActivityChartProps) =
                     yAxisId="right"
                     dot={false}
                     type="monotone"
-                    stroke="#82ca9d"
+                    stroke="var(--color-emerald-600)"
                     strokeWidth={2}
                     fill="url(#colorCharges)"
                 />
