@@ -18,7 +18,7 @@ or
 node --experimental-strip-types index.ts
 ```
 
-## [Task 2](./task_02/)
+## [Task 2a](./task_02a/)
 
 To install dependencies:
 
