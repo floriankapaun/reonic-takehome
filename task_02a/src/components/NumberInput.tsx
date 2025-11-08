@@ -3,7 +3,7 @@ import type { ChangeEvent } from "react"
 type NumberInputProps = {
     value?: number
     label: string
-    placeholer?: string
+    placeholder?: string
     min?: number
     max?: number
     step?: number
