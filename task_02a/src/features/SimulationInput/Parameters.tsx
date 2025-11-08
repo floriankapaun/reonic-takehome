@@ -38,11 +38,11 @@ const SimulationInputParameters = ({ className }: SimulationInputParametersProps
                 }}
             />
 
-            <div className="mt-4 px-3 py-2 bg-gray-100 rounded-sm">
+            <div className="mt-4 px-3 py-2 bg-gray-100 rounded-sm group">
                 <ArrivalProbabilityList multiplier={arrivalProbabilityMultiplier} />
                 <ArrivalProbabilityChart
                     multiplier={arrivalProbabilityMultiplier}
-                    className="mt-4"
+                    className="mt-4 opacity-30 group-hover:opacity-100 transition-opacity duration-200"
                 />
             </div>
         </div>
