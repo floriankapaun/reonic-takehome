@@ -66,8 +66,6 @@ const ArrivalProbability = ({ multiplier }: ArrivalProbabilityProps) => {
                         <stop offset="100%" stopColor="rgba(0, 0, 0, 0.87)" stopOpacity={0} />
                     </linearGradient>
                 </defs>
-                <XAxis dataKey="hour" tick={false} height={1} />
-                <YAxis tick={false} width={1} />
                 <Tooltip
                     formatter={(value) => [`${value}%`, "Arrival Probability"]}
                     allowEscapeViewBox={{ x: true, y: true }}
