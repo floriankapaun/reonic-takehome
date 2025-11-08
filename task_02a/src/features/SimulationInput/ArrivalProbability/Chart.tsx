@@ -1,4 +1,4 @@
-import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, Tooltip, XAxis, YAxis } from "recharts"
 import { ARRIVAL_PROBABILITIES } from "./data"
 
 type ArrivalProbabilityChartProps = {
@@ -13,27 +13,33 @@ const ArrivalProbabilityChart = ({ multiplier, className = "" }: ArrivalProbabil
     }))
 
     return (
-        <LineChart
+        <AreaChart
             className={`w-full aspect-40/9 ${className}`}
             responsive
             data={data}
             margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
         >
+            <defs>
+                <linearGradient id="probabilityGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="rgba(0, 0, 0, 0.87)" stopOpacity={0.6} />
+                    <stop offset="100%" stopColor="rgba(0, 0, 0, 0.87)" stopOpacity={0} />
+                </linearGradient>
+            </defs>
             <XAxis dataKey="hour" tick={false} height={1} />
             <YAxis tick={false} width={1} />
             <Tooltip
                 formatter={(value) => [`${value}%`, "Arrival Probability"]}
                 allowEscapeViewBox={{ x: true, y: true }}
             />
-            <Line
-                dot={false}
+            <Area
                 dataKey="probability"
                 type="monotone"
                 stroke="rgba(0, 0, 0, 0.87)"
-                strokeWidth={1.5}
+                strokeWidth={1}
+                fill="url(#probabilityGradient)"
                 isAnimationActive={false}
             />
-        </LineChart>
+        </AreaChart>
     )
 }
 
