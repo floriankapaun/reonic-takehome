@@ -2,7 +2,8 @@ import HighlightInfo from "./features/SimulationOutput/HightlightInfo"
 import "./index.css"
 import ChargingActivityChart from "./features/SimulationOutput/ChargingActivity/Chart"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import SimulationInputParameters from "./features/SimulationInput/Parameters"
+import ChargingActivity from "./features/SimulationOutput/ChargingActivity"
+import SimulationInput from "./features/SimulationInput"
 
 export const queryClient = new QueryClient()
 
@@ -14,10 +15,7 @@ export function App() {
                     <h1 className="text-xl font-semibold">EV Chargepoint Simulator</h1>
                 </header>
 
-                <h2 className="font-semibold px-4 pt-4">Simulation Parameters</h2>
-                <p className="text-xs text-gray-600 px-4 mb-5">Adjust and run simulation</p>
-
-                <SimulationInputParameters className="sticky top-0 px-4 " />
+                <SimulationInput />
             </aside>
 
             <main className="col-span-3 p-6">
