@@ -1,8 +1,12 @@
 import Card from "./Card"
 
-const HighlightInfo = () => {
+type HighlightInfoProps = {
+    className?: string
+}
+
+const HighlightInfo = ({ className }: HighlightInfoProps) => {
     return (
-        <section>
+        <section className={className}>
             <div className="grid grid-cols-3 gap-4">
                 <Card title="1896 kWh" subtitle="total energy charged p.a." />
                 <Card title="250" subtitle="charging events p.a." />
