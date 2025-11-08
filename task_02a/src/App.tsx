@@ -1,7 +1,7 @@
 import "./index.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import SimulationInput from "./features/SimulationInput"
-import SimulationOutput from "./features/SimulationOutput"
+import SimulationInput from "./components/SimulationInput"
+import SimulationOutput from "./components/SimulationOutput"
 
 export const queryClient = new QueryClient()
 
