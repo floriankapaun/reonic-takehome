@@ -21,7 +21,10 @@ const ArrivalProbabilityChart = ({ multiplier, className = "" }: ArrivalProbabil
         >
             <XAxis dataKey="hour" tick={false} height={1} />
             <YAxis tick={false} width={1} />
-            <Tooltip formatter={(value) => [`${value}%`, "Arrival Probability"]} />
+            <Tooltip
+                formatter={(value) => [`${value}%`, "Arrival Probability"]}
+                allowEscapeViewBox={{ x: true, y: true }}
+            />
             <Line
                 dot={false}
                 dataKey="probability"
