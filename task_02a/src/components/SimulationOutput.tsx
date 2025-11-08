@@ -18,11 +18,11 @@ const SimulationOutput = () => {
                 </div>
             </section>
 
-            <ChargingActivityChart className="mt-10" />
+            <ChargingActivityChart className="mt-20" />
 
             {/* Placeholder for additional charts */}
-            <ChargingActivityChart className="mt-10" />
-            <ChargingActivityChart className="mt-10" />
+            <ChargingActivityChart className="mt-20" />
+            <ChargingActivityChart className="mt-20" />
         </>
     )
 }
