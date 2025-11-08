@@ -9,6 +9,18 @@ const SegmentedControl = <T extends string = string>({
     value,
     onChange,
 }: SegmentedControlProps<T>) => {
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+            event.preventDefault()
+            const currentIndex = options.indexOf(value)
+            const nextIndex =
+                event.key === "ArrowRight"
+                    ? (currentIndex + 1) % options.length
+                    : (currentIndex - 1 + options.length) % options.length
+            onChange(options[nextIndex] as T)
+        }
+    }
+
     return (
         <div className="inline-flex rounded-md bg-gray-200">
             {options.map((option, index) => {
@@ -24,6 +36,7 @@ const SegmentedControl = <T extends string = string>({
                             isActive ? "bg-gray-50" : "text-gray-600 hover:bg-gray-300"
                         } ${isFirst ? "ml-1" : ""} ${isLast ? "mr-1" : ""}`}
                         onClick={() => onChange(option)}
+                        onKeyDown={handleKeyDown}
                     >
                         {option}
                     </button>
