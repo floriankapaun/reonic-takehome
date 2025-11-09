@@ -10,7 +10,7 @@
     }
 
     #root {
-        @apply max-w-7xl min-h-screen grid grid-cols-4 gap-4;
+        @apply max-w-7xl min-h-screen grid grid-cols-4 gap-4 mx-auto;
     }
 }
 

@@ -6,7 +6,7 @@ export function App() {
     return (
         <>
             <aside className="col-span-1 border-r border-gray-200">
-                <header className="p-4 border-b border-gray-200">
+                <header className="p-4 border-b border-l border-gray-200">
                     <h1 className="text-xl font-semibold">EV Chargepoint Simulator</h1>
                 </header>
 
