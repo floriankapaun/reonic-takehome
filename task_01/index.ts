@@ -98,9 +98,8 @@ for (let tick = 0; tick < TICKS; tick++) {
         chargePointsInUse += 1
         const demandedEnergyInKWH = chargingDemandInKm * ENERGY_NEED_PER_KM_IN_KWH
         totalKiloWattHoursConsumed += demandedEnergyInKWH
-        chargePoint.remainingChargingTimeInTicks = Math.ceil(
-            demandedEnergyInKWH / CHARGING_POWER_IN_KW / TICKS_PER_HOUR,
-        )
+        chargePoint.remainingChargingTimeInTicks =
+            Math.ceil((demandedEnergyInKWH / CHARGING_POWER_IN_KW) * TICKS_PER_HOUR) - 1
     }
 
     const currentPowerDemandInKW = chargePointsInUse * CHARGING_POWER_IN_KW
