@@ -1,9 +1,5 @@
-import {
-    useConfigurationContext,
-    type Configuration,
-} from "@/features/Configuration/ConfigurationContext"
+import { useConfigurationContext, type Configuration } from "@/features/Configuration"
 import { IconChevronRight } from "@tabler/icons-react"
-import type { ButtonHTMLAttributes } from "react"
 
 type ConfigurationOptionProps = {
     configuration: Configuration

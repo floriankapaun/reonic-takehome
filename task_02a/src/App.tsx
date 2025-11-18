@@ -1,7 +1,7 @@
 import "./index.css"
 import SimulationInput from "./components/SimulationInput"
 import SimulationOutput from "./components/SimulationOutput"
-import { ConfigurationProvider } from "./features/Configuration/ConfigurationContext"
+import { ConfigurationProvider } from "./features/Configuration"
 
 export function App() {
     return (

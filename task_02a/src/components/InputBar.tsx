@@ -1,10 +1,12 @@
 import { IconPencil, IconPlus, IconSwitch3, IconX } from "@tabler/icons-react"
-import { useState, type ReactNode } from "react"
+import { useState } from "react"
 import Button from "./Button"
 
-import { useConfigurationContext } from "@/features/Configuration/ConfigurationContext"
-import { ConfigurationOptionList } from "@/features/Configuration/ConfigurationOptionList"
-import { ConfigurationCard } from "@/features/Configuration"
+import {
+    ConfigurationCard,
+    useConfigurationContext,
+    ConfigurationOptionList,
+} from "@/features/Configuration"
 
 const InputBar = () => {
     const [isChanging, setIsChanging] = useState<boolean>(false)
