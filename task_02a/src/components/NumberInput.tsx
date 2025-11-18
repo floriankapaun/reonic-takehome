@@ -1,33 +1,44 @@
-import type { ChangeEvent } from "react"
+import type { ChangeEvent, FocusEvent } from "react"
 
-type NumberInputProps = {
-    value?: number
-    label: string
-    placeholder?: string
-    min?: number
-    max?: number
-    step?: number
-    onChange?: (newValue: number) => void
+const clamp = (num: number, min: number | undefined, max: number | undefined) => {
+    if (min !== undefined && num < min) return min
+    if (max !== undefined && num > max) return max
+    return num
 }
 
-const NumberInput = ({ value, label, onChange, min, max, ...rest }: NumberInputProps) => {
+type NumberInputProps = {
+    label: string
+    min?: number
+    max?: number
+    placeholder?: string
+    step?: number
+} & (
+    | { value?: never; onChange?: (newValue: number | undefined) => void }
+    | { value: number | undefined; onChange: (newValue: number | undefined) => void }
+)
+
+const NumberInput = ({ label, min, max, value, onChange, ...rest }: NumberInputProps) => {
+    const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+        const newValue = e.currentTarget.valueAsNumber
+
+        if (isNaN(newValue)) {
+            e.currentTarget.value = ""
+            onChange?.(undefined)
+            return
+        }
+
+        const clampedValue = clamp(newValue, min, max)
+        if (clampedValue !== newValue) {
+            onChange?.(clampedValue)
+            e.currentTarget.valueAsNumber = clampedValue
+        }
+    }
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = e.currentTarget.valueAsNumber
 
         if (isNaN(newValue)) {
-            onChange?.(newValue)
-            return
-        }
-
-        if (min && newValue < min) {
-            onChange?.(min)
-            e.currentTarget.valueAsNumber = min
-            return
-        }
-
-        if (max && newValue > max) {
-            onChange?.(max)
-            e.currentTarget.valueAsNumber = max
+            onChange?.(undefined)
             return
         }
 
@@ -47,6 +58,7 @@ const NumberInput = ({ value, label, onChange, min, max, ...rest }: NumberInputP
                 value={value}
                 min={min}
                 max={max}
+                onBlur={handleBlur}
                 onChange={handleChange}
                 className="flex-1 min-w-0 font-medium text-sm text-right bg-transparent outline-none appearance-textfield"
             />
