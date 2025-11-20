@@ -10,6 +10,7 @@ export default [
     prettierConfig,
     {
         files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+        ignores: ["**/routeTree.gen.ts"],
         languageOptions: {
             parser: tseslint.parser,
         },

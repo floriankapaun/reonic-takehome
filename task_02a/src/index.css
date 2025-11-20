@@ -8,10 +8,6 @@
     body {
         @apply min-w-[320px] min-h-screen relative m-0;
     }
-
-    #root {
-        @apply max-w-7xl min-h-screen grid grid-cols-4 gap-4 mx-auto;
-    }
 }
 
 @media (prefers-reduced-motion) {

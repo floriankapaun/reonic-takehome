@@ -3,15 +3,18 @@
     "type": "module",
     "private": false,
     "scripts": {
+        "generate-routes": "tsr generate",
+        "watch-routes": "tsr watch",
         "format": "prettier --write .",
         "typecheck": "tsc --noEmit",
         "lint": "eslint .",
-        "dev": "bun --hot src/index.ts",
+        "dev": "bun run watch-routes & bun --hot src/index.ts",
         "start": "NODE_ENV=production bun src/index.ts",
-        "build": "bun run build.ts"
+        "build": "bun run generate-routes && bun run build.ts"
     },
     "dependencies": {
         "@tabler/icons-react": "^3.35.0",
+        "@tanstack/react-router": "^1.136.11",
         "bun-plugin-tailwind": "^0.1.2",
         "react": "^19",
         "react-dom": "^19",
@@ -20,6 +23,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.39.1",
+        "@tanstack/router-cli": "^1.136.11",
         "@total-typescript/ts-reset": "^0.6.1",
         "@types/bun": "latest",
         "@types/react": "^19",
