@@ -3,7 +3,7 @@ import Select from "@/components/Select"
 import TextInput from "@/components/TextInput"
 import { useConfigurationContext } from "@/features/Configuration"
 import useLocalStorage from "@/hooks/useLocalStorage"
-import { IconTrash } from "@tabler/icons-react"
+import { IconBolt, IconPlug, IconTrash } from "@tabler/icons-react"
 import { createLazyFileRoute, Link } from "@tanstack/react-router"
 import { useState, type Dispatch, type SetStateAction } from "react"
 
@@ -41,7 +41,7 @@ const Zone = ({
     }
 
     return (
-        <div className="flex flex-col gap-4 border border-gray-200 shadow-xs p-4 rounded-md mb-4">
+        <div className="flex flex-col gap-4 border border-gray-200 shadow-xs p-4 rounded-md">
             <div className="flex justify-between items-center gap-4">
                 <h3 className="font-medium">Zone {index}</h3>
                 <button
@@ -157,32 +157,43 @@ function ConfigurationPage() {
                             Add Zone
                         </button>
                     </div>
-                    <div className="mt-4">
+
+                    <div className="flex flex-col gap-4 mt-4">
                         {zones.length === 0 && <p>No charging zones configured.</p>}
                         {zones.map((zone, index) => (
                             <Zone key={zone.id} index={index + 1} zone={zone} setZones={setZones} />
                         ))}
                     </div>
 
-                    <hr />
+                    <hr className="border-gray-200 my-8" aria-hidden="true" />
 
-                    <div className="flex flex-row">
-                        <div className="mt-4 p-4 border rounded-md bg-gray-50">
-                            <h3 className="font-semibold mb-2">Total Chargers</h3>
-                            <p className="text-lg">
-                                {zones.reduce((total, zone) => total + zone.chargers, 0)}
-                            </p>
+                    <div className="flex flex-row items-stretch gap-4">
+                        <div className="w-full flex flex-col justify-between items-start gap-2 bg-gray-50 border border-gray-200 shadow-xs p-4 rounded-md">
+                            <h3 className="text-sm text-gray-600 font-medium">Total Chargers</h3>
+                            <div className="flex items-center justify-start gap-1">
+                                <IconPlug size="1.375rem" />
+                                <p className="font-medium text-xl">
+                                    {zones.reduce((total, zone) => total + zone.chargers, 0)}
+                                </p>
+                            </div>
                         </div>
-                        <div className="mt-4 p-4 border rounded-md bg-gray-50">
-                            <h3 className="font-semibold mb-2">Total Theoretical Maximum Power</h3>
-                            <p className="text-lg">
-                                {zones.reduce(
-                                    (total, zone) =>
-                                        total + zone.chargers * zone.powerPerChargerInKW,
-                                    0,
-                                )}{" "}
-                                kW
-                            </p>
+
+                        <div className="w-full flex flex-col justify-between items-start gap-2 bg-gray-200 border border-gray-300 shadow-xs p-4 rounded-md">
+                            <h3 className="text-sm text-gray-600 font-medium">
+                                Theoretical Maximum Power
+                            </h3>
+
+                            <div className="flex items-center justify-start gap-1">
+                                <IconBolt size="1.375rem" />
+                                <p className="font-medium text-xl">
+                                    {zones.reduce(
+                                        (total, zone) =>
+                                            total + zone.chargers * zone.powerPerChargerInKW,
+                                        0,
+                                    )}{" "}
+                                    kW
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
