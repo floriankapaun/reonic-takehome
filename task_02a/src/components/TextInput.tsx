@@ -16,7 +16,7 @@ const TextInput = ({ label, description, error, onChange, ...inputProps }: TextI
     const id = useId()
 
     return (
-        <div className="flex flex-col gap-2 w-full max-w-sm">
+        <div className="flex flex-col gap-2 w-full max-w-[26rem]">
             {label && (
                 <label htmlFor={id} className="text-sm leading-snug font-medium">
                     {label}
