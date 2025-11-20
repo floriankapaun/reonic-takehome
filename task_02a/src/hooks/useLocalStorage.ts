@@ -31,7 +31,19 @@ const useLocalStorage = <T>(storageKey: string, defaultValue: T): UseLocalStorag
         }
     }
 
-    useEffect(() => setStoredValue(readValue()), [storageKey])
+    useEffect(() => {
+        setStoredValue(readValue())
+
+        // sync between tabs
+        const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === storageKey && event.storageArea === window.localStorage) {
+                setStoredValue(readValue())
+            }
+        }
+
+        window.addEventListener("storage", handleStorageChange)
+        return () => window.removeEventListener("storage", handleStorageChange)
+    }, [storageKey])
 
     return [storedValue, setValue]
 }
