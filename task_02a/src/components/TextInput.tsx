@@ -16,7 +16,7 @@ const TextInput = ({ label, description, error, onChange, ...inputProps }: TextI
     const id = useId()
 
     return (
-        <div className="flex flex-col gap-2 max-w-sm">
+        <div className="flex flex-col gap-2 w-full max-w-sm">
             {label && (
                 <label htmlFor={id} className="text-sm leading-snug font-medium">
                     {label}
@@ -28,7 +28,7 @@ const TextInput = ({ label, description, error, onChange, ...inputProps }: TextI
             <input
                 {...inputProps}
                 aria-invalid={error ? "true" : "false"}
-                className="h-9 w-full min-w-0 rounded-md border border-gray-300 bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm focus-visible:border-blue-500 focus-visible:ring-3 focus-visible:ring-blue-500/40 aria-invalid:ring-red-600/20 aria-invalid:border-red-600"
+                className="h-9 rounded-md border border-gray-300 bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm focus-visible:border-blue-500 focus-visible:ring-3 focus-visible:ring-blue-500/40 aria-invalid:ring-red-600/20 aria-invalid:border-red-600"
                 id={id}
                 type="text"
                 onChange={(e) => onChange?.(e.target.value)}
