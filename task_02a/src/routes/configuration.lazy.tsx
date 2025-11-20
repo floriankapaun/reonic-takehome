@@ -3,6 +3,7 @@ import Select from "@/components/Select"
 import TextInput from "@/components/TextInput"
 import { useConfigurationContext } from "@/features/Configuration"
 import useLocalStorage from "@/hooks/useLocalStorage"
+import { IconTrash } from "@tabler/icons-react"
 import { createLazyFileRoute, Link } from "@tanstack/react-router"
 import { useState, type Dispatch, type SetStateAction } from "react"
 
@@ -40,57 +41,53 @@ const Zone = ({
     }
 
     return (
-        <div className="border p-4 rounded-md mb-4">
-            <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold mb-2">Zone {index}</h3>
+        <div className="flex flex-col gap-4 border border-gray-200 shadow-xs p-4 rounded-md mb-4">
+            <div className="flex justify-between items-center gap-4">
+                <h3 className="font-medium">Zone {index}</h3>
                 <button
-                    className="px-2 py-1 bg-red-500 text-white rounded cursor-pointer"
+                    className="hover:text-red-600 bg-transparent p-1.5 rounded cursor-pointer hover:bg-red-600/20"
                     type="button"
                     onClick={removeZone}
                 >
-                    Delete Zone
+                    <IconTrash size="1.125rem" />
+                    <span className="sr-only">Delete Zone</span>
                 </button>
             </div>
-            <div className="flex flex-row gap-4 mb-4">
-                <div className="mb-2">
-                    {/* TODO: Don't directly mutate zone, but introduce a form */}
-                    <NumberInput
-                        value={zone.chargers}
-                        onChange={(value) => updateZone(zone.id, { chargers: value })}
-                        label="Number of Chargers"
-                    />
-                </div>
-                <div>
-                    <Select
-                        label="Power per Charger (kW)"
-                        options={[
-                            { label: "11 kW", value: "11" },
-                            { label: "22 kW", value: "22" },
-                            { label: "50 kW", value: "50" },
-                            { label: "Custom", value: "custom" },
-                        ]}
-                        value={hasCustomPower ? "custom" : String(zone.powerPerChargerInKW)}
-                        onChange={(value) => {
-                            if (value === "custom") {
-                                updateZone(zone.id, { powerPerChargerInKW: 11 })
-                                setHasCustomPower(true)
-                            } else {
-                                updateZone(zone.id, { powerPerChargerInKW: Number(value) })
-                                setHasCustomPower(false)
-                            }
-                        }}
-                    />
-                </div>
+
+            <div className="flex flex-row items-center gap-4">
+                {/* TODO: Don't directly mutate zone, but introduce a form */}
+                <NumberInput
+                    value={zone.chargers}
+                    onChange={(value) => updateZone(zone.id, { chargers: value })}
+                    label="Number of Chargers"
+                />
+                <Select
+                    label="Power per Charger"
+                    options={[
+                        { label: "11 kW", value: "11" },
+                        { label: "22 kW", value: "22" },
+                        { label: "50 kW", value: "50" },
+                        { label: "Custom", value: "custom" },
+                    ]}
+                    value={hasCustomPower ? "custom" : String(zone.powerPerChargerInKW)}
+                    onChange={(value) => {
+                        if (value === "custom") {
+                            updateZone(zone.id, { powerPerChargerInKW: 11 })
+                            setHasCustomPower(true)
+                        } else {
+                            updateZone(zone.id, { powerPerChargerInKW: Number(value) })
+                            setHasCustomPower(false)
+                        }
+                    }}
+                />
             </div>
 
             {hasCustomPower && (
-                <div>
-                    <NumberInput
-                        label="Power per Charger (kW)"
-                        value={zone.powerPerChargerInKW}
-                        onChange={(value) => updateZone(zone.id, { powerPerChargerInKW: value })}
-                    />
-                </div>
+                <NumberInput
+                    label="Power per Charger (kW)"
+                    value={zone.powerPerChargerInKW}
+                    onChange={(value) => updateZone(zone.id, { powerPerChargerInKW: value })}
+                />
             )}
         </div>
     )
