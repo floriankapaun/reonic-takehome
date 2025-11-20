@@ -43,7 +43,7 @@ const Zone = ({
             <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold mb-2">Zone {index}</h3>
                 <button
-                    className="px-2 py-1 bg-red-500 text-white rounded"
+                    className="px-2 py-1 bg-red-500 text-white rounded cursor-pointer"
                     type="button"
                     onClick={removeZone}
                 >
@@ -52,12 +52,11 @@ const Zone = ({
             </div>
             <div className="flex flex-row gap-4 mb-4">
                 <div className="mb-2">
-                    <label className="block mb-1">Number of Chargers:</label>
-                    <input
-                        type="number"
-                        className="border rounded p-2 w-full"
-                        defaultValue={zone.chargers}
-                        onChange={(e) => updateZone(zone.id, { chargers: Number(e.target.value) })}
+                    {/* TODO: Don't directly mutate zone, but introduce a form */}
+                    <NumberInput
+                        value={zone.chargers}
+                        onChange={(value) => updateZone(zone.id, { chargers: value })}
+                        label="Number of Chargers"
                     />
                 </div>
                 <div>
@@ -159,7 +158,7 @@ function ConfigurationPage() {
                     <div className="flex flex-row justify-start items-center">
                         <h3>Charging Zones</h3>
                         <button
-                            className="ml-4 px-3 py-1 bg-blue-500 text-white rounded"
+                            className="ml-4 px-3 py-1 bg-blue-500 text-white rounded cursor-pointer"
                             type="button"
                             onClick={addZone}
                         >
@@ -208,8 +207,22 @@ function ConfigurationPage() {
                                 {Array.from({ length: zone.chargers }).map((_, i) => (
                                     <div
                                         key={i}
-                                        className="w-12 h-12 bg-green-300 flex items-center justify-center rounded"
+                                        className="w-12 h-12 bg-green-300 flex items-center justify-center rounded cursor-pointer"
+                                        // Remove charger on click
+                                        onClick={() => {
+                                            setZones((prevZones) =>
+                                                prevZones.map((z) =>
+                                                    z.id === zone.id
+                                                        ? {
+                                                              ...z,
+                                                              chargers: Math.max(z.chargers - 1, 0),
+                                                          }
+                                                        : z,
+                                                ),
+                                            )
+                                        }}
                                     >
+                                        {/* TODO: On hover, show "X" to remove charger */}
                                         <span className="text-sm">Spot {i + 1}</span>
                                     </div>
                                 ))}
