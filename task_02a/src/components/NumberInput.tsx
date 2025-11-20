@@ -1,4 +1,4 @@
-import type { ChangeEvent, FocusEvent } from "react"
+import { useId, type ChangeEvent, type FocusEvent } from "react"
 
 const clamp = (num: number, min: number | undefined, max: number | undefined) => {
     if (min !== undefined && num < min) return min
@@ -7,17 +7,31 @@ const clamp = (num: number, min: number | undefined, max: number | undefined) =>
 }
 
 type NumberInputProps = {
-    label: string
+    name?: string
+    label?: string
+    placeholder?: string
+    description?: string
+    error?: string
+    defaultValue?: number
     min?: number
     max?: number
-    placeholder?: string
     step?: number
 } & (
     | { value?: never; onChange?: (newValue: number | undefined) => void }
     | { value: number | undefined; onChange: (newValue: number | undefined) => void }
 )
 
-const NumberInput = ({ label, min, max, value, onChange, ...rest }: NumberInputProps) => {
+const NumberInput = ({
+    label,
+    description,
+    error,
+    min,
+    max,
+    onChange,
+    ...inputProps
+}: NumberInputProps) => {
+    const id = useId()
+
     const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
         const newValue = e.currentTarget.valueAsNumber
 
@@ -46,23 +60,29 @@ const NumberInput = ({ label, min, max, value, onChange, ...rest }: NumberInputP
     }
 
     return (
-        <label className="w-full inline-flex items-center gap-3 px-3 py-2 rounded-sm bg-gray-100 hover:bg-gray-200 focus-within:bg-gray-300 focus-within:hover:bg-gray-300 transition-colors duration-100">
-            <span className="flex-none text-sm leading-tight whitespace-nowrap overflow-hidden text-ellipsis max-w-[75%]">
-                {label}
-            </span>
+        <div className="flex flex-col gap-2 max-w-sm">
+            {label && (
+                <label htmlFor={id} className="text-sm leading-snug font-medium">
+                    {label}
+                </label>
+            )}
+
+            {description && <p className="text-sm text-gray-600 leading-snug">{description}</p>}
 
             <input
-                {...rest}
+                {...inputProps}
+                aria-invalid={error ? "true" : "false"}
+                className="h-9 w-full min-w-0 rounded-md border border-gray-300 bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm focus-visible:border-blue-500 focus-visible:ring-3 focus-visible:ring-blue-500/40 aria-invalid:ring-red-600/20 aria-invalid:border-red-600"
+                id={id}
                 type="number"
-                name={label}
-                value={value}
                 min={min}
                 max={max}
                 onBlur={handleBlur}
                 onChange={handleChange}
-                className="flex-1 min-w-0 font-medium text-sm text-right bg-transparent outline-none appearance-textfield"
             />
-        </label>
+
+            {error && <p className="text-sm text-red-600">{error}</p>}
+        </div>
     )
 }
 
