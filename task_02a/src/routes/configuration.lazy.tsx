@@ -1,4 +1,5 @@
 import NumberInput from "@/components/NumberInput"
+import Select from "@/components/Select"
 import TextInput from "@/components/TextInput"
 import { useConfigurationContext } from "@/features/Configuration"
 import useLocalStorage from "@/hooks/useLocalStorage"
@@ -60,13 +61,16 @@ const Zone = ({
                     />
                 </div>
                 <div>
-                    <label className="block mb-1">Power per Charger (kW):</label>
-                    {/* Select, 11kW, 22kW, 50kW or custom */}
-                    <select
-                        className="border rounded p-2 w-full"
-                        value={hasCustomPower ? "custom" : zone.powerPerChargerInKW}
-                        onChange={(e) => {
-                            const value = e.target.value
+                    <Select
+                        label="Power per Charger (kW)"
+                        options={[
+                            { label: "11 kW", value: "11" },
+                            { label: "22 kW", value: "22" },
+                            { label: "50 kW", value: "50" },
+                            { label: "Custom", value: "custom" },
+                        ]}
+                        value={hasCustomPower ? "custom" : String(zone.powerPerChargerInKW)}
+                        onChange={(value) => {
                             if (value === "custom") {
                                 updateZone(zone.id, { powerPerChargerInKW: 11 })
                                 setHasCustomPower(true)
@@ -75,25 +79,16 @@ const Zone = ({
                                 setHasCustomPower(false)
                             }
                         }}
-                    >
-                        <option value={11}>11 kW</option>
-                        <option value={22}>22 kW</option>
-                        <option value={50}>50 kW</option>
-                        <option value="custom">Custom</option>
-                    </select>
+                    />
                 </div>
             </div>
 
             {hasCustomPower && (
                 <div>
-                    <label className="block mb-1">Power per Charger (kW):</label>
-                    <input
-                        type="number"
-                        className="border rounded p-2 w-full"
-                        defaultValue={zone.powerPerChargerInKW}
-                        onChange={(e) =>
-                            updateZone(zone.id, { powerPerChargerInKW: Number(e.target.value) })
-                        }
+                    <NumberInput
+                        label="Power per Charger (kW)"
+                        value={zone.powerPerChargerInKW}
+                        onChange={(value) => updateZone(zone.id, { powerPerChargerInKW: value })}
                     />
                 </div>
             )}
