@@ -1,3 +1,5 @@
+import NumberInput from "@/components/NumberInput"
+import TextInput from "@/components/TextInput"
 import { useConfigurationContext } from "@/features/Configuration"
 import useLocalStorage from "@/hooks/useLocalStorage"
 import { createLazyFileRoute, Link } from "@tanstack/react-router"
@@ -125,41 +127,31 @@ function ConfigurationPage() {
 
     return (
         <div>
-            {/* <h2 className="text-3xl font-semibold mt-4 mb-4">Configuration</h2> */}
+            <div className="p-4">
+                <h2 className="text-xl font-medium">Configuration</h2>
+            </div>
 
-            <div className="grid grid-cols-12 gap-4 p-4">
-                <div className="col-span-12 md:col-span-6">
-                    <label className="block mb-1 font-semibold">Configuration Name</label>
-                    <input
-                        defaultValue={editConfiguration.name}
-                        type="text"
-                        className="border rounded p-2 w-full"
-                        // You might want to add state and onChange handler here
-                    />
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
+                <TextInput
+                    defaultValue={editConfiguration.name}
+                    label="Configuration Name"
+                    placeholder="Enter configuration name"
+                    description="Name of the configuration"
+                />
 
-                <div className="col-span-12 md:col-span-3">
-                    <label className="block mb-1">Average kWh/100 km:</label>
-                    <p className="text-xs text-gray-600 mb-1">
-                        Average cars energy demand to drive 100 km
-                    </p>
-                    <input
-                        defaultValue={editConfiguration.kWhPerCar}
-                        type="number"
-                        className="border rounded p-2 w-full"
-                        // You might want to add state and onChange handler here
-                    />
-                </div>
+                <NumberInput
+                    defaultValue={editConfiguration.kWhPerCar}
+                    label="kWh/100 km per Car"
+                    placeholder="e.g., 18"
+                    description="Average cars energy demand to drive 100 km"
+                />
 
-                <div className="col-span-12 md:col-span-3">
-                    <label className="block mb-1">Arrival Probability Multiplier:</label>
-                    <input
-                        defaultValue={editConfiguration.arrivalProbabilityMultiplier}
-                        type="number"
-                        className="border rounded p-2 w-full"
-                        // You might want to add state and onChange handler here
-                    />
-                </div>
+                <NumberInput
+                    defaultValue={editConfiguration.arrivalProbabilityMultiplier}
+                    label="Arrival Probability Multiplier"
+                    placeholder="e.g., 1.0"
+                    description="Multiplier for arrival probability of cars"
+                />
             </div>
 
             <div className="p-4 lg:grid grid-cols-3 gap-4">
