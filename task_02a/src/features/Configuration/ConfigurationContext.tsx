@@ -8,12 +8,16 @@ import {
     type SetStateAction,
 } from "react"
 
+type ChargepointBatch = {
+    numberOfChargepoints: number
+    powerInKW: number
+}
+
 export type Configuration = {
     id: string
     name: string
-    numberOfChargepoints: number
+    chargepointSetup: ChargepointBatch[]
     kWhPerCar: number
-    kWPerChargepoint: number
     arrivalProbabilityMultiplier: number
 }
 
@@ -21,33 +25,37 @@ const DEFAULT_CONFIGURATIONS = [
     {
         id: "default",
         name: "Default Configuration",
-        numberOfChargepoints: 20,
+        chargepointSetup: [{ numberOfChargepoints: 20, powerInKW: 11 }],
         kWhPerCar: 18,
-        kWPerChargepoint: 11,
         arrivalProbabilityMultiplier: 1,
     },
     {
-        id: "high_capacity",
-        name: "High Capacity",
-        numberOfChargepoints: 50,
+        id: "many_standard_chargers",
+        name: "Many Standard Chargers",
+        chargepointSetup: [
+            { numberOfChargepoints: 50, powerInKW: 11 },
+            { numberOfChargepoints: 20, powerInKW: 22 },
+            { numberOfChargepoints: 10, powerInKW: 50 },
+        ],
         kWhPerCar: 18,
-        kWPerChargepoint: 22,
         arrivalProbabilityMultiplier: 1.2,
     },
     {
-        id: "high_usage",
-        name: "High Usage",
-        numberOfChargepoints: 30,
-        kWhPerCar: 25,
-        kWPerChargepoint: 11,
-        arrivalProbabilityMultiplier: 2,
+        id: "few_fast_chargers",
+        name: "Few Fast Chargers",
+        chargepointSetup: [
+            { numberOfChargepoints: 10, powerInKW: 50 },
+            { numberOfChargepoints: 5, powerInKW: 150 },
+        ],
+        kWhPerCar: 30,
+        arrivalProbabilityMultiplier: 0.8,
     },
 ] as const satisfies Configuration[]
 
 type ConfigurationContextType = {
     configurations: Configuration[]
     setConfigurations: Dispatch<SetStateAction<Configuration[]>>
-    activeConfigurationId: string
+    activeConfigurationId: string // TODO: Has to be nullable? Or prevent deleting last config...
     setActiveConfigurationId: Dispatch<SetStateAction<string>>
     activeConfiguration: Configuration
 }
