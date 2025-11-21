@@ -7,6 +7,7 @@ import {
     useConfigurationContext,
     ConfigurationOptionList,
 } from "@/features/Configuration"
+import { Link } from "@tanstack/react-router"
 
 const InputBar = () => {
     const [isChanging, setIsChanging] = useState<boolean>(false)
@@ -26,18 +27,16 @@ const InputBar = () => {
                         </Button>
                     ) : (
                         <>
-                            <Button
-                                leftSection={<IconPlus size="1em" aria-hidden />}
-                                onClick={() => {}}
+                            <Button leftSection={<IconPlus size="1em" aria-hidden />}>Add</Button>
+                            <Link
+                                to="/configuration"
+                                search={{ id: activeConfiguration.id }}
+                                tabIndex={-1}
                             >
-                                Add
-                            </Button>
-                            <Button
-                                leftSection={<IconPencil size="1em" aria-hidden />}
-                                onClick={() => {}}
-                            >
-                                Edit
-                            </Button>
+                                <Button leftSection={<IconPencil size="1em" aria-hidden />}>
+                                    Edit
+                                </Button>
+                            </Link>
                             <Button
                                 leftSection={<IconX size="1em" aria-hidden />}
                                 onClick={() => setIsChanging(false)}
