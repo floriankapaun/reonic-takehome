@@ -3,7 +3,7 @@ import type { ReactNode } from "react"
 type ButtonProps = {
     children: ReactNode
     leftSection?: ReactNode
-    onClick: () => void
+    onClick?: () => void
 }
 
 const Button = ({ children, leftSection, onClick }: ButtonProps) => {
