@@ -120,7 +120,7 @@ function ConfigurationPage() {
     }
 
     return (
-        <div>
+        <div className="max-w-7xl min-h-screen mx-auto">
             <div className="p-4">
                 <h2 className="text-xl font-medium">Configuration</h2>
             </div>

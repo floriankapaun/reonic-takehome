@@ -8,7 +8,7 @@ export const Route = createLazyFileRoute("/")({
 
 function IndexPage() {
     return (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-4 gap-4 max-w-7xl min-h-screen mx-auto">
             <aside className="col-span-1 border-r border-gray-200">
                 <SimulationInput />
             </aside>
