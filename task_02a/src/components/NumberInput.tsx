@@ -1,4 +1,4 @@
-import { useId, type ChangeEvent, type FocusEvent } from "react"
+import { useId, type ChangeEvent, type FocusEvent, type ReactNode } from "react"
 
 const clamp = (num: number, min: number | undefined, max: number | undefined) => {
     if (min !== undefined && num < min) return min
@@ -6,7 +6,13 @@ const clamp = (num: number, min: number | undefined, max: number | undefined) =>
     return num
 }
 
+const variantStyles = {
+    default: "border-gray-300 shadow-xs",
+    subtle: "border-transparent shadow-none hover:bg-gray-200/30 focus-visible:bg-transparent",
+} as const
+
 type NumberInputProps = {
+    className?: string
     name?: string
     label?: string
     placeholder?: string
@@ -16,17 +22,22 @@ type NumberInputProps = {
     min?: number
     max?: number
     step?: number
+    variant?: keyof typeof variantStyles
+    rightSection?: ReactNode
 } & (
     | { value?: never; onChange?: (newValue: number | undefined) => void }
     | { value: number | undefined; onChange: (newValue: number | undefined) => void }
 )
 
 const NumberInput = ({
+    className,
     label,
     description,
     error,
     min,
     max,
+    variant = "default",
+    rightSection,
     onChange,
     ...inputProps
 }: NumberInputProps) => {
@@ -69,17 +80,22 @@ const NumberInput = ({
 
             {description && <p className="text-sm text-gray-600 leading-snug">{description}</p>}
 
-            <input
-                {...inputProps}
-                aria-invalid={error ? "true" : "false"}
-                className="h-9 rounded-md border border-gray-300 bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm focus-visible:border-blue-500 focus-visible:ring-3 focus-visible:ring-blue-500/40 aria-invalid:ring-red-600/20 aria-invalid:border-red-600"
-                id={id}
-                type="number"
-                min={min}
-                max={max}
-                onBlur={handleBlur}
-                onChange={handleChange}
-            />
+            <div
+                className={`flex flex-row nowrap h-9 rounded-md border bg-white px-3 py-1 text-base transition-[color,box-shadow] outline-none md:text-sm focus-within:border-blue-500 focus-within:ring-3 focus-within:ring-blue-500/40 aria-invalid:ring-red-600/20 aria-invalid:border-red-600 ${variantStyles[variant]} ${className ?? ""}`}
+            >
+                <input
+                    {...inputProps}
+                    aria-invalid={error ? "true" : "false"}
+                    className="w-full min-w-0 placeholder:text-gray-400 focus-visible:outline-none"
+                    id={id}
+                    type="number"
+                    min={min}
+                    max={max}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                />
+                {rightSection && <div className="text-gray-600">{rightSection}</div>}
+            </div>
 
             {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
