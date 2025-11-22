@@ -74,7 +74,7 @@ const ChargepointSetup = ({ configurationId }: ChargepointSetupProps) => {
                 <p className="text-sm leading-snug font-medium">({zones.length})</p>
             </div>
 
-            <div className="lg:grid grid-cols-3 gap-4">
+            <div className="flex flex-col lg:grid grid-cols-3 gap-6 lg:gap-4">
                 <div className="col-span-2 flex flex-col justify-start gap-6">
                     <div className="border border-gray-200 rounded-lg overflow-hidden">
                         <div className="w-full overflow-x-auto">
