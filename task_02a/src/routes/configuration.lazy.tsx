@@ -150,7 +150,10 @@ function ConfigurationPage() {
                         defaultValue={editConfiguration.arrivalProbabilityMultiplier}
                         label="Arrival Probability Multiplier"
                         placeholder="e.g., 1.0"
-                        description="Multiplier for arrival probability of cars"
+                        description="Multiplier for arrival probability of cars (0.2 - 2.0)"
+                        min={0.2}
+                        max={2.0}
+                        step={0.1}
                     />
                 </div>
 
