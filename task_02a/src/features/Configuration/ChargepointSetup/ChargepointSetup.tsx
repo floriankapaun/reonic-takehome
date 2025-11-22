@@ -208,10 +208,25 @@ const ChargepointSetup = ({ configurationId }: ChargepointSetupProps) => {
                                         Zone {index + 1}
                                     </h3>
                                     <hr className="border-gray-200 w-full shrink-1" />
-                                    {/* TODO: Make editable */}
-                                    <p className="border border-gray-200 bg-gray-100 px-2 py-1 leading-none rounded-full text-xs font-semibold shrink-0">
-                                        {zone.powerInKW} kW
-                                    </p>
+                                    <div className="flex flex-row items-center nowrap gap-1">
+                                        <NumberInput
+                                            className="h-8! w-24 "
+                                            value={zone.powerInKW}
+                                            min={0}
+                                            rightSection="kW"
+                                            onChange={(value) =>
+                                                updateZone(index, { powerInKW: value })
+                                            }
+                                        />
+
+                                        <Button
+                                            size="sm"
+                                            color="subtle-gray"
+                                            onClick={() => removeZone(index)}
+                                        >
+                                            <IconTrash size="1rem" />
+                                        </Button>
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-5 md:grid-cols-12 gap-2">
@@ -248,7 +263,6 @@ const ChargepointSetup = ({ configurationId }: ChargepointSetupProps) => {
                             </div>
                         ))}
 
-                        {/* Add Zone */}
                         <div className="mt-2">
                             <Button leftSection={<IconPlus />} size="xs" onClick={addZone}>
                                 Add Zone
@@ -309,65 +323,3 @@ const ChargepointSetup = ({ configurationId }: ChargepointSetupProps) => {
 }
 
 export default ChargepointSetup
-
-const Visualization = () => {
-    return (
-        <div className="h-full p-6 bg-gray-50 bg-[radial-gradient(#e0e0e0_1px,transparent_1px)] [background-size:24px_24px] border border-gray-200 shadow-xs rounded-lg">
-            {[].map((zone, index) => (
-                <div key={zone.id} className="flex flex-col gap-4 mb-8 last:mb-0">
-                    <div className="h-6 flex flex-row justify-between items-center gap-4">
-                        <h3 className="text-sm text-gray-600 uppercase font-medium shrink-0">
-                            Zone {index + 1}
-                        </h3>
-                        <hr className="border-gray-200 w-full shrink-1" />
-                        <p className="border border-gray-200 bg-gray-100 px-2 py-1 leading-none rounded-full text-xs font-semibold shrink-0">
-                            {zone.powerPerChargerInKW} kW
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-5 gap-4">
-                        {Array.from({ length: zone.chargers }).map((_, i) => (
-                            <div
-                                key={i}
-                                className="w-full aspect-square bg-gray-200 border border-gray-300 shadow-xs flex flex-col items-center justify-center rounded cursor-pointer"
-                                // Remove charger on click
-                                onClick={() => {
-                                    // setZones((prevZones) =>
-                                    //     prevZones.map((z) =>
-                                    //         z.id === zone.id
-                                    //             ? {
-                                    //                   ...z,
-                                    //                   chargers: Math.max(z.chargers - 1, 0),
-                                    //               }
-                                    //             : z,
-                                    //     ),
-                                    // )
-                                }}
-                            >
-                                {/* TODO: On hover, show "X" to remove charger */}
-                                <IconPlug size="1.5rem" />
-                                <p className="text-xs">Spot {i + 1}</p>
-                                {/* TODO: Drag and drop */}
-                            </div>
-                        ))}
-                        <div
-                            className="w-full aspect-square border-2 border-dashed border-gray-400 shadow-xs flex flex-col items-center justify-center rounded cursor-pointer hover:bg-gray-100"
-                            onClick={() => {
-                                // setZones((prevZones) =>
-                                //     prevZones.map((z) =>
-                                //         z.id === zone.id
-                                //             ? { ...z, chargers: z.chargers + 1 }
-                                //             : z,
-                                //     ),
-                                // )
-                            }}
-                        >
-                            <IconPlus size="1.5rem" />
-                            <p className="text-xs">Add Spot</p>
-                        </div>
-                    </div>
-                </div>
-            ))}
-        </div>
-    )
-}
