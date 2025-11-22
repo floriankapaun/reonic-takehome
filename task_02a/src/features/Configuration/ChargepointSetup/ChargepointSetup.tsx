@@ -1,6 +1,7 @@
 import NumberInput from "@/components/NumberInput"
 import { IconBolt, IconPlug, IconPlus, IconTrash } from "@tabler/icons-react"
 import { useConfigurationContext, type Configuration } from "../ConfigurationContext"
+import Button from "@/components/Button"
 
 type ChargepointSetupProps = {
     configurationId: string
@@ -76,90 +77,92 @@ const ChargepointSetup = ({ configurationId }: ChargepointSetupProps) => {
             <div className="lg:grid grid-cols-3 gap-4">
                 <div className="col-span-2 flex flex-col justify-start gap-6">
                     <div className="border border-gray-200 rounded-lg overflow-hidden">
-                        <table className="w-full text-sm text-left table-fixed">
-                            <thead className="h-10 bg-gray-100 [&_th]:font-medium [&_th]:px-2">
-                                <tr>
-                                    <th>Zone</th>
-                                    <th>Chargers</th>
-                                    <th>Power per Charger (kW)</th>
-                                    <th className="text-right w-30">Total capacity</th>
-                                    <th className="w-12"></th>
-                                </tr>
-                            </thead>
-
-                            <tbody className="[&_tr]:border-t [&_tr]:border-gray-200 [&_td]:p-2">
-                                {zones.length === 0 && (
+                        <div className="w-full overflow-x-auto">
+                            <table className="min-w-full text-sm text-left table-fixed">
+                                <thead className="h-10 bg-gray-100 [&_th]:font-medium [&_th]:px-2 [&_th]:whitespace-nowrap">
                                     <tr>
-                                        <td colSpan={5} className="text-gray-500">
-                                            No charging zones configured yet.
-                                        </td>
+                                        <th>Zone</th>
+                                        <th>Chargers</th>
+                                        <th>Power per Charger (kW)</th>
+                                        <th className="text-right w-30">Total capacity</th>
+                                        <th className="w-12"></th>
                                     </tr>
-                                )}
+                                </thead>
 
-                                {zones.map((zone, index) => (
-                                    <tr key={index}>
-                                        <td>Zone {index + 1}</td>
+                                <tbody className="[&_tr]:border-t [&_tr]:border-gray-200 [&_td]:p-2 [&_td]:whitespace-nowrap">
+                                    {zones.length === 0 && (
+                                        <tr>
+                                            <td colSpan={5} className="text-gray-500">
+                                                No charging zones configured yet.
+                                            </td>
+                                        </tr>
+                                    )}
 
-                                        <td>
-                                            <NumberInput
-                                                className="h-8!"
-                                                placeholder="0"
-                                                variant="subtle"
-                                                value={zone.numberOfChargepoints}
-                                                min={0}
-                                                onChange={(value) =>
-                                                    updateZone(index, {
-                                                        numberOfChargepoints: value,
-                                                    })
-                                                }
-                                            />
-                                        </td>
+                                    {zones.map((zone, index) => (
+                                        <tr key={index}>
+                                            <td>Zone {index + 1}</td>
 
-                                        <td>
-                                            {/* TODO: Could add a autocomplete here for standard values 11, 22, 50 */}
-                                            <NumberInput
-                                                className="h-8!"
-                                                placeholder="0"
-                                                variant="subtle"
-                                                value={zone.powerInKW}
-                                                min={0}
-                                                onChange={(value) =>
-                                                    updateZone(index, { powerInKW: value })
-                                                }
-                                            />
-                                        </td>
+                                            <td>
+                                                <NumberInput
+                                                    className="h-8! max-w-24"
+                                                    placeholder="0"
+                                                    variant="subtle"
+                                                    value={zone.numberOfChargepoints}
+                                                    min={0}
+                                                    onChange={(value) =>
+                                                        updateZone(index, {
+                                                            numberOfChargepoints: value,
+                                                        })
+                                                    }
+                                                />
+                                            </td>
 
-                                        <td className="text-right">
-                                            {zone.numberOfChargepoints * zone.powerInKW} kW
-                                        </td>
+                                            <td>
+                                                {/* TODO: Could add a autocomplete here for standard values 11, 22, 50 */}
+                                                <NumberInput
+                                                    className="h-8! max-w-24"
+                                                    placeholder="0"
+                                                    variant="subtle"
+                                                    value={zone.powerInKW}
+                                                    min={0}
+                                                    onChange={(value) =>
+                                                        updateZone(index, { powerInKW: value })
+                                                    }
+                                                />
+                                            </td>
 
-                                        <td>
-                                            <button
-                                                className="hover:text-red-600 bg-transparent p-1.5 rounded cursor-pointer hover:bg-red-600/20"
-                                                type="button"
-                                                onClick={() => removeZone(index)}
+                                            <td className="text-right">
+                                                {/* TODO: Handle NaN case */}
+                                                {zone.numberOfChargepoints * zone.powerInKW} kW
+                                            </td>
+
+                                            <td>
+                                                <button
+                                                    className="hover:text-red-600 bg-transparent p-1.5 rounded cursor-pointer hover:bg-red-600/20"
+                                                    type="button"
+                                                    onClick={() => removeZone(index)}
+                                                >
+                                                    <IconTrash size="1rem" />
+                                                    <span className="sr-only">Delete Zone</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+
+                                    <tr>
+                                        <td colSpan={5}>
+                                            <Button
+                                                leftSection={<IconPlus />}
+                                                size="xs"
+                                                onClick={addZone}
                                             >
-                                                <IconTrash size="1rem" />
-                                                <span className="sr-only">Delete Zone</span>
-                                            </button>
+                                                Add Zone
+                                            </Button>
                                         </td>
                                     </tr>
-                                ))}
-
-                                <tr>
-                                    <td colSpan={5}>
-                                        <button
-                                            className="flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap text-sm font-medium transition-[color,box-shadow,translate] outline-none border border-gray-300 bg-transparent px-3 [&_svg]:w-4 has-[>svg]:px-2.5 shadow-xs rounded-md cursor-pointer hover:bg-gray-100 focus-visible:border-blue-500 focus-visible:ring-blue-500/40 focus-visible:ring-3 active:translate-y-[1px]"
-                                            type="button"
-                                            onClick={addZone}
-                                        >
-                                            <IconPlus />
-                                            Add Zone
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     {/* TODO: Add toggle to switch between table and this: */}
