@@ -5,8 +5,8 @@ import TextInput from "@/components/TextInput"
 import { useConfigurationContext } from "@/features/Configuration"
 import ChargepointSetup from "@/features/Configuration/ChargepointSetup/ChargepointSetup"
 import useLocalStorage from "@/hooks/useLocalStorage"
-import { IconArrowLeft, IconBolt, IconCheck, IconTrash } from "@tabler/icons-react"
-import { createLazyFileRoute, Link } from "@tanstack/react-router"
+import { IconArrowLeft, IconBolt, IconCheck, IconPlus, IconTrash } from "@tabler/icons-react"
+import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState, type Dispatch, type SetStateAction } from "react"
 
 export const Route = createLazyFileRoute("/configuration")({
@@ -97,7 +97,8 @@ const Zone = ({
 
 function ConfigurationPage() {
     const { id } = Route.useSearch()
-    const { configurations, activeConfiguration } = useConfigurationContext()
+    const navigate = useNavigate()
+    const { configurations, setConfigurations, activeConfiguration } = useConfigurationContext()
 
     const editConfigurationId = id ?? activeConfiguration?.id
 
@@ -105,12 +106,19 @@ function ConfigurationPage() {
         ? configurations.find((config) => config.id === id)
         : activeConfiguration
 
-    if (!editConfiguration) {
-        // TODO: Better error handling
-        return <div>Configuration not found</div>
-    }
-
     const hasChanges = false
+
+    const createConfiguration = () => {
+        const newConfig = {
+            id: "my-configuration-" + Date.now().toString(),
+            name: "My Configuration " + (configurations.length + 1),
+            kWhPerCar: 18,
+            arrivalProbabilityMultiplier: 1.0,
+            chargepointSetup: [{ numberOfChargepoints: 20, powerInKW: 11 }],
+        }
+        setConfigurations([...configurations, newConfig])
+        return newConfig
+    }
 
     return (
         <main className="min-h-(--content-min-height)">
@@ -131,65 +139,94 @@ function ConfigurationPage() {
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-8 mb-2 p-4">
-                    <TextInput
-                        defaultValue={editConfiguration.name}
-                        label="Configuration Name"
-                        placeholder="Enter configuration name"
-                        description="Name of the configuration"
-                    />
+                {!editConfiguration && (
+                    <div className="flex flex-col items-start gap-4 p-4">
+                        <p className={id ? "text-red-600" : "text-gray-600"}>
+                            Configuration not found.
+                        </p>
 
-                    <NumberInput
-                        defaultValue={editConfiguration.kWhPerCar}
-                        label="kWh/100 km per Car"
-                        placeholder="e.g., 18"
-                        description="Average cars energy demand to drive 100 km"
-                    />
+                        <Button
+                            leftSection={<IconPlus />}
+                            onClick={() => {
+                                const newConfig = createConfiguration()
+                                navigate({
+                                    to: ".",
+                                    search: (prev) => ({ ...prev, id: newConfig.id }),
+                                    replace: true,
+                                })
+                            }}
+                        >
+                            Create new Configuration
+                        </Button>
+                    </div>
+                )}
 
-                    <NumberInput
-                        defaultValue={editConfiguration.arrivalProbabilityMultiplier}
-                        label="Arrival Probability Multiplier"
-                        placeholder="e.g., 1.0"
-                        description="Multiplier for arrival probability of cars (0.2 - 2.0)"
-                        min={0.2}
-                        max={2.0}
-                        step={0.1}
-                    />
-                </div>
+                {editConfiguration && (
+                    <>
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-8 mb-2 p-4">
+                            <TextInput
+                                defaultValue={editConfiguration.name}
+                                label="Configuration Name"
+                                placeholder="Enter configuration name"
+                                description="Name of the configuration"
+                            />
 
-                <div className="px-4">
-                    <ChargepointSetup configurationId={editConfigurationId} />
-                </div>
+                            <NumberInput
+                                defaultValue={editConfiguration.kWhPerCar}
+                                label="kWh/100 km per Car"
+                                placeholder="e.g., 18"
+                                description="Average cars energy demand to drive 100 km"
+                            />
+
+                            {/* TODO: Add link to page with more details (show hourly arrival probabilities and graph) */}
+                            <NumberInput
+                                defaultValue={editConfiguration.arrivalProbabilityMultiplier}
+                                label="Arrival Probability Multiplier"
+                                placeholder="e.g., 1.0"
+                                description="Multiplier for arrival probability of cars (0.2 - 2.0)"
+                                min={0.2}
+                                max={2.0}
+                                step={0.1}
+                            />
+                        </div>
+
+                        <div className="px-4">
+                            <ChargepointSetup configurationId={editConfigurationId} />
+                        </div>
+                    </>
+                )}
             </div>
 
-            <div className="sticky bottom-0  bg-white border-t border-gray-200 mt-6">
-                <div className="max-w-7xl mx-auto flex gap-4 p-4">
-                    {hasChanges ? (
-                        <>
-                            <Button color="blue" leftSection={<IconCheck />}>
-                                Save Changes
-                            </Button>
+            {editConfiguration && (
+                <div className="sticky bottom-0  bg-white border-t border-gray-200 mt-6">
+                    <div className="max-w-7xl mx-auto flex gap-4 p-4">
+                        {hasChanges ? (
+                            <>
+                                <Button color="blue" leftSection={<IconCheck />}>
+                                    Save Changes
+                                </Button>
 
+                                <Link to="/" tabIndex={-1}>
+                                    <Button
+                                        onClick={() => {
+                                            // TODO: Reset Form
+                                            // TODO: Ask for confirmation if changes were made
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </Link>
+                            </>
+                        ) : (
                             <Link to="/" tabIndex={-1}>
-                                <Button
-                                    onClick={() => {
-                                        // TODO: Reset Form
-                                        // TODO: Ask for confirmation if changes were made
-                                    }}
-                                >
-                                    Cancel
+                                <Button color="blue" leftSection={<IconBolt />}>
+                                    Run Simulation
                                 </Button>
                             </Link>
-                        </>
-                    ) : (
-                        <Link to="/" tabIndex={-1}>
-                            <Button color="blue" leftSection={<IconBolt />}>
-                                Run Simulation
-                            </Button>
-                        </Link>
-                    )}
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </main>
     )
 }
