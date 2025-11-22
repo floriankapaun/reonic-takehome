@@ -1,6 +1,7 @@
 import NumberInput from "@/components/NumberInput"
 import {
     IconBolt,
+    IconChargingPile,
     IconChartCohort,
     IconList,
     IconPlug,
@@ -232,9 +233,11 @@ const ChargepointSetup = ({ configurationId }: ChargepointSetupProps) => {
                                 <div className="grid grid-cols-5 md:grid-cols-12 gap-2">
                                     {Array.from({ length: zone.numberOfChargepoints }).map(
                                         (_, i) => (
-                                            <div
+                                            <button
                                                 key={i}
-                                                className="w-full aspect-square bg-gray-200 border border-gray-300 shadow-xs flex flex-col items-center justify-center rounded cursor-pointer"
+                                                aria-label={`Delete spot ${i + 1}`}
+                                                className="group w-full aspect-square bg-gray-200 border border-gray-300 flex flex-col items-center justify-center rounded-lg outline-none cursor-pointer hover:bg-gray-300 hover:border-gray-500 focus-visible:ring-3 focus-visible:border-blue-500 focus-visible:ring-blue-500/40"
+                                                type="button"
                                                 onClick={() => {
                                                     return updateZone(index, {
                                                         numberOfChargepoints:
@@ -242,23 +245,40 @@ const ChargepointSetup = ({ configurationId }: ChargepointSetupProps) => {
                                                     })
                                                 }}
                                             >
-                                                {/* TODO: On hover, show "X" to remove charger */}
-                                                <IconPlug size="1.5rem" />
-                                                <p className="text-xs">Spot {i + 1}</p>
-                                            </div>
+                                                {/* TODO: Adjust icon and text-size to container width, by using container queries */}
+                                                <div className="hidden group-hover:flex group-focus-visible:flex flex-col items-center nowrap">
+                                                    <IconX size="1.5rem" />
+                                                    <p className="text-xs text-gray-600 leading-none">
+                                                        Remove
+                                                    </p>
+                                                </div>
+
+                                                <div className="flex flex-row items-center nowrap gap-0.5 group-hover:hidden group-focus-visible:hidden">
+                                                    <IconChargingPile
+                                                        size="1.4rem"
+                                                        stroke={1.5}
+                                                        className="text-gray-600"
+                                                    />
+                                                    <p className="text-xl leading-none">{i + 1}</p>
+                                                </div>
+                                            </button>
                                         ),
                                     )}
-                                    <div
-                                        className="w-full aspect-square border-2 border-dashed border-gray-400 shadow-xs flex flex-col items-center justify-center rounded cursor-pointer hover:bg-gray-100"
+                                    <button
+                                        aria-label="Add Charger"
+                                        className="w-full aspect-square text-gray-400 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center rounded-lg cursor-pointer outline-none hover:bg-gray-100 hover:border-gray-500 hover:text-black focus-visible:ring-3 focus-visible:border focus-visible:border-solid focus-visible:border-blue-500 focus-visible:ring-blue-500/40 focus-visible:text-black"
+                                        type="button"
                                         onClick={() => {
                                             return updateZone(index, {
                                                 numberOfChargepoints: zone.numberOfChargepoints + 1,
                                             })
                                         }}
                                     >
-                                        <IconPlus size="1.5rem" />
-                                        <p className="text-xs">Add Spot</p>
-                                    </div>
+                                        <p className="text-xs text-center leading-[1.1]">
+                                            <IconPlus size="1rem" className="inline -mt-0.5" />
+                                            Add Charger
+                                        </p>
+                                    </button>
                                 </div>
                             </div>
                         ))}
