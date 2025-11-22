@@ -113,7 +113,7 @@ function ConfigurationPage() {
     const hasChanges = false
 
     return (
-        <main className="min-h-(--content-min-height) flex flex-col justify-between gap-6">
+        <main className="min-h-(--content-min-height)">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-row justify-start items-center gap-4 p-4">
                     <h2 className="text-xl font-medium">Configuration</h2>
@@ -159,7 +159,7 @@ function ConfigurationPage() {
                 </div>
             </div>
 
-            <div className="sticky bottom-0  bg-white border-t border-gray-200">
+            <div className="sticky bottom-0  bg-white border-t border-gray-200 mt-6">
                 <div className="max-w-7xl mx-auto flex gap-4 p-4">
                     {hasChanges ? (
                         <>
