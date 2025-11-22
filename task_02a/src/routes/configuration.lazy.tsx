@@ -120,36 +120,38 @@ function ConfigurationPage() {
     }
 
     return (
-        <div className="max-w-7xl min-h-screen mx-auto">
-            <div className="p-4">
-                <h2 className="text-xl font-medium">Configuration</h2>
-            </div>
+        <main className="min-h-(--content-min-height) flex flex-col justify-between">
+            <div className="max-w-7xl mx-auto h-full">
+                <div className="p-4">
+                    <h2 className="text-xl font-medium">Configuration</h2>
+                </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-8 mb-2 p-4">
-                <TextInput
-                    defaultValue={editConfiguration.name}
-                    label="Configuration Name"
-                    placeholder="Enter configuration name"
-                    description="Name of the configuration"
-                />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-8 mb-2 p-4">
+                    <TextInput
+                        defaultValue={editConfiguration.name}
+                        label="Configuration Name"
+                        placeholder="Enter configuration name"
+                        description="Name of the configuration"
+                    />
 
-                <NumberInput
-                    defaultValue={editConfiguration.kWhPerCar}
-                    label="kWh/100 km per Car"
-                    placeholder="e.g., 18"
-                    description="Average cars energy demand to drive 100 km"
-                />
+                    <NumberInput
+                        defaultValue={editConfiguration.kWhPerCar}
+                        label="kWh/100 km per Car"
+                        placeholder="e.g., 18"
+                        description="Average cars energy demand to drive 100 km"
+                    />
 
-                <NumberInput
-                    defaultValue={editConfiguration.arrivalProbabilityMultiplier}
-                    label="Arrival Probability Multiplier"
-                    placeholder="e.g., 1.0"
-                    description="Multiplier for arrival probability of cars"
-                />
-            </div>
+                    <NumberInput
+                        defaultValue={editConfiguration.arrivalProbabilityMultiplier}
+                        label="Arrival Probability Multiplier"
+                        placeholder="e.g., 1.0"
+                        description="Multiplier for arrival probability of cars"
+                    />
+                </div>
 
-            <div className="px-4">
-                <ChargepointSetup configurationId={editConfigurationId} />
+                <div className="px-4">
+                    <ChargepointSetup configurationId={editConfigurationId} />
+                </div>
             </div>
 
             <div className="sticky bottom-0 bg-white p-4 mt-6 border-t flex justify-end gap-2">
@@ -170,6 +172,6 @@ function ConfigurationPage() {
                     Save Configuration
                 </button>
             </div>
-        </div>
+        </main>
     )
 }

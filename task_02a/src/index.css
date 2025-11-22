@@ -2,6 +2,9 @@
 
 @layer base {
     :root {
+        --header-height: calc(var(--spacing) * 12);
+        --content-min-height: calc(100vh - var(--header-height));
+
         @apply text-[rgba(0,0,0,0.87)] bg-white font-sans;
     }
 
