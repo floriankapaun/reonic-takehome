@@ -29,7 +29,7 @@ const Button = ({
     return (
         <button
             type="button"
-            className={`inline-flex items-center justify-center shrink-0 text-sm font-medium whitespace-nowrap border rounded-md outline-none shadow-xs transition-[color,box-shadow,translate] cursor-pointer focus-visible:ring-3 active:translate-y-[1px] ${sizeStyles[size]} ${colorStyles[color]} ${className ?? ""}`}
+            className={`inline-flex items-center justify-center shrink-0 align-middle text-sm font-medium whitespace-nowrap border rounded-md outline-none shadow-xs transition-[color,box-shadow,translate] cursor-pointer focus-visible:ring-3 active:translate-y-[1px] ${sizeStyles[size]} ${colorStyles[color]} ${className ?? ""}`}
             {...buttonProps}
         >
             {leftSection && <span data-section="left">{leftSection}</span>}
